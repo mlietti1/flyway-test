@@ -20,6 +20,7 @@ jobs:
               uses: actions/setup-java@v3 # Flyway richiede Java
               with:
                   java-version: "17"
+                  distribution: "temurin"
 
             - name: Install Flyway
               run: |
