@@ -7,5 +7,5 @@ if ! [ -x "$(command -v flyway)" ]; then
   exit 1
 fi
 
-# Esegui le migrazioni
+# Esegui le migrazioni da locale
 flyway migrate
