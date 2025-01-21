@@ -24,13 +24,15 @@ jobs:
 
             - name: Install Flyway
               run: |
-                  # download e install Flyway
+                  # installa flyway se non presente
                   curl -L https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.21.1/flyway-commandline-9.21.1-linux-x64.tar.gz | tar xz
-                  sudo ln -s $PWD/flyway-*/flyway /usr/local/bin/flyway
+                  if [ ! -L /usr/local/bin/flyway ]; then
+                      sudo ln -s $PWD/flyway-*/flyway /usr/local/bin/flyway
+                  fi
 
             - name: Run migrations
               env:
                   FLYWAY_URL: ${{ secrets.FLYWAY_URL }} # URL del database
                   FLYWAY_USER: ${{ secrets.FLYWAY_USER }} # User del database
                   FLYWAY_PASSWORD: ${{ secrets.FLYWAY_PASSWORD }} # Password del database
-              run: flyway migrate -configFiles=flyway.conf # Esegui le migrazioni
+              run: flyway migrate -configFiles=flyway.conf # Migrazione Flyway
