@@ -3,18 +3,18 @@ name: Deploy to MySQL
 on:
     push:
         branches:
-            - main # La pipeline si attiva su push al branch "main"
+            - main
     pull_request:
         branches:
-            - main # Opzionale: puoi eseguire la pipeline per testare le migrazioni nei pull request
+            - main
 
 jobs:
     flyway-migration:
-        runs-on: ubuntu-latest # Usa un ambiente Linux di base
+        runs-on: self-hosted # runner locale
 
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3 # Recupera il codice dal repository
+              uses: actions/checkout@v3 # Per recuperare il codice dal repository
 
             - name: Set up Java
               uses: actions/setup-java@v3 # Flyway richiede Java
@@ -24,13 +24,13 @@ jobs:
 
             - name: Install Flyway
               run: |
-                  # Scarica e installa Flyway
+                  # download e install Flyway
                   curl -L https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/9.21.1/flyway-commandline-9.21.1-linux-x64.tar.gz | tar xz
                   sudo ln -s $PWD/flyway-*/flyway /usr/local/bin/flyway
 
             - name: Run migrations
               env:
                   FLYWAY_URL: ${{ secrets.FLYWAY_URL }} # URL del database
-                  FLYWAY_USER: ${{ secrets.FLYWAY_USER }} # Utente del database
+                  FLYWAY_USER: ${{ secrets.FLYWAY_USER }} # User del database
                   FLYWAY_PASSWORD: ${{ secrets.FLYWAY_PASSWORD }} # Password del database
               run: flyway migrate -configFiles=flyway.conf # Esegui le migrazioni
